@@ -1595,7 +1595,7 @@
         async function fetchData() {
           try {
             const response = await fetch(
-              "http://localhost:5000/api/manufacturer/customer-requirements"
+              "https://backend-api-bez7.onrender.com/api/manufacturer/customer-requirements"
             );
             if (!response.ok)
               throw new Error(`HTTP error! Status: ${response.status}`);
@@ -1771,7 +1771,7 @@
 
         try {
           const response = await fetch(
-            `http://localhost:5000/api/manufacturer/update-approval/${orderId}`,
+            `https://backend-api-bez7.onrender.com/api/manufacturer/update-approval/${orderId}`,
             {
               method: "PUT",
               headers: { "Content-Type": "application/json" },
