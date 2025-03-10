@@ -1445,6 +1445,372 @@
       }
     </script>
 
+    <script>
+      // document.addEventListener("DOMContentLoaded", function () {
+      //   fetchData();
+
+      //   let showMoreBtn = document.getElementById("showMoreBtn");
+      //   let showLessBtn = document.getElementById("showLessBtn");
+      //   let visibleRows = 5; // Number of rows to show initially
+
+      //   function updateTableDisplay() {
+      //     let rows = document.querySelectorAll("#projectsTable tbody tr");
+      //     rows.forEach((row, index) => {
+      //       row.style.display = index < visibleRows ? "" : "none";
+      //     });
+
+      //     showMoreBtn.style.display =
+      //       visibleRows < rows.length ? "inline-block" : "none";
+      //     showLessBtn.style.display = visibleRows > 5 ? "inline-block" : "none";
+      //   }
+
+      //   window.showMoreRows = function () {
+      //     visibleRows += 5; // Show 5 more rows
+      //     updateTableDisplay();
+      //   };
+
+      //   window.showLessRows = function () {
+      //     visibleRows = 5; // Reset to initial number of rows
+      //     updateTableDisplay();
+      //   };
+
+      //   // Fetch data from API and populate the table
+      //   async function fetchData() {
+      //     try {
+      //       const response = await fetch(
+      //         "http://localhost:5000/api/manufacturer/customer-requirements"
+      //       ); // Replace with your API endpoint
+      //       const data = await response.json();
+
+      //       let tableBody = document.querySelector("#projectsTable tbody");
+      //       tableBody.innerHTML = ""; // Clear existing rows
+
+      //       data.forEach((item) => {
+      //         let row = `
+      //     <tr>
+      //       <td>
+      //         <div class="d-flex px-2 py-1">
+      //           <div class="avatar avatar-sm">
+      //             <img src="" alt="xd" />
+      //           </div>
+      //           <div class="d-flex flex-column justify-content-center">
+      //             <h6 class="mb-0 text-sm">${item.customer_id}</h6>
+      //           </div>
+      //         </div>
+      //       </td>
+      //       <td>
+      //         <div class="d-flex px-2 py-1">
+      //           <div class="d-flex flex-column justify-content-center">
+      //             <h6 class="mb-0 text-sm">${item.order_id}</h6>
+      //           </div>
+      //         </div>
+      //       </td>
+      //       <td>
+      //         <div class="d-flex px-2 py-1">
+      //           <div class="d-flex flex-column justify-content-center">
+      //             <h6 class="mb-0 text-sm">${item.cname}</h6>
+      //           </div>
+      //         </div>
+      //       </td>
+      //       <td>
+      //         <div class="d-flex px-2 py-1">
+      //           <div class="d-flex flex-column justify-content-center">
+      //             <h6 class="mb-0 text-sm">${item.pname}</h6>
+      //           </div>
+      //         </div>
+      //       </td>
+      //       <td>
+      //         <div class="d-flex px-2 py-1">
+      //           <div class="d-flex flex-column justify-content-center">
+      //             <h6 class="mb-0 text-sm">${item.Part_Name}</h6>
+      //           </div>
+      //         </div>
+      //       </td>
+      //       <td>
+      //         <div class="d-flex px-2 py-1">
+      //           <div class="d-flex flex-column justify-content-center">
+      //             <h6 class="mb-0 text-sm">${item.category}</h6>
+      //           </div>
+      //         </div>
+      //       </td>
+      //       <td>
+      //         <a href="${item.detailsUrl}">
+      //           <button type="button" class="btn btn-primary">View</button>
+      //         </a>
+      //       </td>
+      //     </tr>
+      //   `;
+      //         tableBody.innerHTML += row;
+      //       });
+
+      //       updateTableDisplay();
+      //     } catch (error) {
+      //       console.error("Error fetching data:", error);
+      //     }
+      //   }
+      // });
+
+      // // Search Functionality
+      // function searchTable() {
+      //   let input = document.getElementById("searchInput").value.toUpperCase();
+      //   let table = document.getElementById("projectsTable");
+      //   let rows = table.getElementsByTagName("tr");
+
+      //   for (let i = 1; i < rows.length; i++) {
+      //     let rowText = rows[i].textContent || rows[i].innerText;
+      //     rows[i].style.display = rowText.toUpperCase().includes(input)
+      //       ? ""
+      //       : "none";
+      //   }
+      // }
+
+      document.addEventListener("DOMContentLoaded", function () {
+        fetchData();
+
+        let showMoreBtn = document.getElementById("showMoreBtn");
+        let showLessBtn = document.getElementById("showLessBtn");
+        let visibleRows = 5;
+
+        function updateTableDisplay() {
+          let rows = document.querySelectorAll("#projectsTable tbody tr");
+          rows.forEach((row, index) => {
+            row.style.display = index < visibleRows ? "" : "none";
+          });
+
+          showMoreBtn.style.display =
+            visibleRows < rows.length ? "inline-block" : "none";
+          showLessBtn.style.display = visibleRows > 5 ? "inline-block" : "none";
+        }
+
+        window.showMoreRows = function () {
+          visibleRows += 5;
+          updateTableDisplay();
+        };
+
+        window.showLessRows = function () {
+          visibleRows = 5;
+          updateTableDisplay();
+        };
+
+        async function fetchData() {
+          try {
+            const response = await fetch(
+              "http://localhost:5000/api/manufacturer/customer-requirements"
+            );
+            if (!response.ok)
+              throw new Error(`HTTP error! Status: ${response.status}`);
+
+            const data = await response.json();
+            let tableBody = document.querySelector("#projectsTable tbody");
+            tableBody.innerHTML = "";
+
+            data.forEach((order) => {
+              let row = `
+                <tr id="row-${order._id}">
+                    <td>${order.customer_id}</td>
+                    <td>${order.order_id}</td>
+                    <td>${order.cname}</td>
+                    <td>${order.pname}</td>
+                    <td>${order.Part_Name}</td>
+                    <td>${order.category}</td>
+                    <td>
+                        <button type="button" class="btn btn-primary view-btn" data-order='${JSON.stringify(
+                          order
+                        )}'>
+                            View
+                        </button>
+                    </td>
+                </tr>
+                `;
+              tableBody.insertAdjacentHTML("beforeend", row);
+            });
+
+            document.querySelectorAll(".view-btn").forEach((btn) => {
+              btn.addEventListener("click", function () {
+                openModal(JSON.parse(this.getAttribute("data-order")));
+              });
+            });
+
+            updateTableDisplay();
+          } catch (error) {
+            console.error("Error fetching data:", error);
+          }
+        }
+      });
+
+      // Function to open modal with order details
+      function openModal(order) {
+        const existingModal = document.getElementById("orderModal");
+        if (existingModal) existingModal.remove();
+
+        const modalHtml = `
+    <div class="modal fade" id="orderModal" tabindex="-1" aria-labelledby="orderModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Order Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Order Information</h5>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <p><strong>Customer ID:</strong> ${
+                                      order.customer_id
+                                    }</p>
+                                    <p><strong>Project ID:</strong> ${
+                                      order.order_id
+                                    }</p>
+                                    <p><strong>Company Name:</strong> ${
+                                      order.cname
+                                    }</p>
+                                    <p><strong>Project Name:</strong> ${
+                                      order.pname
+                                    }</p>
+                                    <p><strong>Part Name:</strong> ${
+                                      order.Part_Name
+                                    }</p>
+                                    <p><strong>Category:</strong> ${
+                                      order.category
+                                    }</p>
+                                    <p><strong>Email:</strong> ${
+                                      order.email
+                                    }</p>
+                                    <p><strong>Phone Number:</strong> ${
+                                      order.phone_number
+                                    }</p>
+                                </div>
+                                <div class="col-md-6">
+                                    <p><strong>Part Number:</strong> ${
+                                      order.cpno
+                                    }</p>
+                                    <p><strong>Target Value:</strong> ${
+                                      order.tv
+                                    }</p>
+                                    <p><strong>Annual Volume:</strong> ${
+                                      order.av
+                                    }</p>
+                                    <p><strong>Quote Submission:</strong> ${new Date(
+                                      order.qs
+                                    ).toLocaleDateString()}</p>
+                                    <p><strong>Start of Production:</strong> ${new Date(
+                                      order.sop
+                                    ).toLocaleDateString()}</p>
+                                    <p><strong>Status:</strong> ${
+                                      order.working_status
+                                    }</p>
+                                    <p><strong>Supplier:</strong> ${
+                                      order.supplier_name
+                                    }</p>
+                                    <p><strong>Supplier:</strong> ${
+                                      order.isApproved
+                                    }</p>
+                                </div>
+                            </div>
+
+                            ${
+                              order.pdf_file && order.pdf_file.trim() !== ""
+                                ? `
+                                <div class="mt-3 text-center">
+                                    <a href="${order.pdf_file}" download class="btn btn-success">
+                                        <i class="fas fa-file-download"></i> Download File
+                                    </a>
+                                </div>`
+                                : `<p class="text-muted text-center mt-3">No file available</p>`
+                            }
+
+                            <div class="mt-3">
+                                <h6>Approval Status</h6>
+                                <label class="me-3">
+                                    <input type="radio" name="approval" value="approved" ${
+                                      order.isApproved === true ? "checked" : ""
+                                    }> Yes (Approved)
+                                </label>
+                                <label>
+                                    <input type="radio" name="approval" value="disapproved" ${
+                                      order.isApproved === false
+                                        ? "checked"
+                                        : ""
+                                    }> No (Disapproved)
+                                </label>
+                            </div>
+
+                            <div class="text-end mt-3">
+                                <button class="btn btn-success" onclick="updateApprovalStatus('${
+                                  order._id
+                                }')">Save</button>
+                                <button class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>`;
+
+        document.body.insertAdjacentHTML("beforeend", modalHtml);
+        new bootstrap.Modal(document.getElementById("orderModal")).show();
+      }
+
+      // Function to update approval status
+      async function updateApprovalStatus(orderId) {
+        const selectedRadio = document.querySelector(
+          "input[name='approval']:checked"
+        );
+        if (!selectedRadio) {
+          alert("Please select an approval status.");
+          return;
+        }
+
+        const isApproved = selectedRadio.value === "approved";
+
+        const requestData = { isApproved };
+        console.log("Sending request data:", requestData); // Debugging
+
+        try {
+          const response = await fetch(
+            `http://localhost:5000/api/manufacturer/update-approval/${orderId}`,
+            {
+              method: "PUT",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(requestData),
+            }
+          );
+
+          if (response.ok) {
+            alert("Approval status updated successfully!");
+            location.reload();
+          } else {
+            const errorData = await response.json();
+            console.error("Error response from server:", errorData);
+            alert(
+              `Failed to update approval status: ${
+                errorData.message || "Unknown error"
+              }`
+            );
+          }
+        } catch (error) {
+          console.error("Error updating approval status:", error);
+          alert("An error occurred while updating approval status.");
+        }
+      }
+
+      // Search Functionality
+      function searchTable() {
+        let input = document.getElementById("searchInput").value.toUpperCase();
+        let table = document.getElementById("projectsTable");
+        let rows = table.getElementsByTagName("tr");
+
+        for (let i = 1; i < rows.length; i++) {
+          let rowText = rows[i].textContent || rows[i].innerText;
+          rows[i].style.display = rowText.toUpperCase().includes(input)
+            ? ""
+            : "none";
+        }
+      }
+    </script>
     <!-- Github buttons -->
     <script async defer src="https://buttons.github.io/buttons.js"></script>
     <!-- Control Center for Material Dashboard: parallax effects, scripts for the example pages etc -->
