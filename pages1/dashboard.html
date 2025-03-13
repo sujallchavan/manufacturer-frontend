@@ -46,6 +46,8 @@
   </head>
 
   <body class="g-sidenav-show bg-gray-100">
+    <button onclick="logoutUser()">Logout</button>
+
     <aside
       class="sidenav navbar navbar-vertical navbar-expand-xs border-radius-lg fixed-start ms-2 bg-white my-2"
       id="sidenav-main"
@@ -1787,6 +1789,22 @@
 
         // Fetch orders on page load
         window.onload = fetchOrders;
+
+        document.addEventListener("DOMContentLoaded", function () {
+  const user = sessionStorage.getItem("user");
+
+  if (!user) {
+    alert("You must log in first!");
+    window.location.href = "sign-in.html"; // Redirect to login if not logged in
+  }
+});
+
+
+        function logoutUser() {
+  sessionStorage.removeItem("user"); // ✅ Clear session storage
+  window.location.href = "sign-in.html"; // ✅ Redirect to login
+}
+
     </script>
     </script>
     <!-- Bootstrap JavaScript (Ensure this is included) -->
@@ -1807,9 +1825,12 @@
       crossorigin="anonymous"
     ></script>
 
+    
+
     <!-- Github buttons -->
     <script async defer src="https://buttons.github.io/buttons.js"></script>
     <!-- Control Center for Material Dashboard: parallax effects, scripts for the example pages etc -->
-    <script src="../assets/js/material-dashboard.min.js?v=3.2.0"></script>
+    <script src="./assets/js/material-dashboard.min.js?v=3.2.0"></script>
+
   </body>
 </html>
