@@ -59,7 +59,7 @@
       <div class="row">
         <div class="col-12">
           <!-- Navbar -->
-          <nav
+          <!-- <nav
             class="navbar navbar-expand-lg blur border-radius-xl top-0 z-index-3 shadow position-absolute my-3 py-2 start-0 end-0 mx-4"
           >
             <div class="container-fluid ps-2 pe-0">
@@ -136,7 +136,7 @@
                 </ul>
               </div>
             </div>
-          </nav>
+          </nav> -->
           <!-- End Navbar -->
         </div>
       </div>
@@ -222,6 +222,7 @@
                       <button
                         type="submit"
                         class="btn bg-gradient-dark w-100 my-4 mb-2"
+                        id="loginBtn"
                       >
                         Sign in
                       </button>
@@ -229,7 +230,7 @@
                     <p class="mt-4 text-sm text-center">
                       Don't have an account?
                       <a
-                        href="../pages/sign-up.html"
+                        href="../pages1/sign-up.html"
                         class="text-primary text-gradient font-weight-bold"
                         >Sign up</a
                       >
@@ -319,39 +320,55 @@
       }
     </script>
     <script>
-      document
-        .getElementById("loginForm")
-        .addEventListener("submit", function (event) {
-          event.preventDefault(); // ✅ Prevent default form submission
+      document.addEventListener("DOMContentLoaded", function () {
+        document
+          .getElementById("loginForm")
+          .addEventListener("submit", async function (event) {
+            event.preventDefault(); // ✅ Prevent default form submission
 
-          // Get input values
-          const email = document.getElementById("email").value;
-          const password = document.getElementById("password").value;
+            // Get input values
+            const email = document.getElementById("email").value.trim();
+            const password = document.getElementById("password").value.trim();
+            const loginBtn = document.getElementById("loginBtn");
 
-          // ✅ Send login request to backend
-          fetch("http://localhost:5000/api/manufacturer/login", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ email, password }),
-          })
-            .then((response) => response.json())
-            .then((data) => {
-              if (data.message === "Login successful!") {
-                // ✅ Store user session in sessionStorage
-                sessionStorage.setItem("user", JSON.stringify(data.user));
+            // ✅ Disable login button while processing
+            loginBtn.disabled = true;
+            loginBtn.textContent = "Logging in...";
+
+            try {
+              // ✅ Send login request to backend
+              const response = await fetch(
+                "http://localhost:5000/api/manufacturer/login",
+                {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({ email, password }),
+                }
+              );
+
+              const data = await response.json();
+
+              if (response.ok) {
+                // ✅ Store only email in sessionStorage
+                sessionStorage.setItem("userEmail", email);
 
                 alert("Login successful!");
                 window.location.href = "dashboard.html"; // ✅ Redirect to dashboard
               } else {
-                alert("Invalid email or password");
+                alert(data.error || "Invalid email or password");
               }
-            })
-            .catch((error) => {
-              console.error("Error:", error);
-              alert("Something went wrong!");
-            });
-        });
+            } catch (error) {
+              console.error("Login Error:", error);
+              alert("Network error! Please try again.");
+            } finally {
+              // ✅ Re-enable login button
+              loginBtn.disabled = false;
+              loginBtn.textContent = "Login";
+            }
+          });
+      });
     </script>
+
     <!-- Github buttons -->
     <script async defer src="https://buttons.github.io/buttons.js"></script>
     <!-- Control Center for Material Dashboard: parallax effects, scripts for the example pages etc -->
