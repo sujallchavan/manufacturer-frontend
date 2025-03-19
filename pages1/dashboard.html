@@ -9,6 +9,15 @@
     />
     <!-- Nucleo Icons -->
     <style>
+
+body {
+    background-image: url('bg.jpg'); /* Replace with your image path */
+    background-size: cover; /* Ensures the image covers the entire screen */
+    background-position: center; /* Centers the image */
+    background-repeat: no-repeat; /* Prevents image repetition */
+    background-attachment: fixed; /* Keeps the image fixed while scrolling */
+}
+
       .form-control {
         display: block;
         width: 100%;
@@ -140,6 +149,7 @@
             <a class="nav-link text-dark" href="../pages/sign-up.html">
               <i class="material-symbols-rounded opacity-5">assignment</i>
               <span class="nav-link-text ms-1">Sign Up</span>
+              <span id="approvedCount">0</span></h3>
             </a>
           </li>
         </ul>
@@ -368,17 +378,73 @@
                 </ul>
               </li>
               <li class="nav-item d-flex align-items-center">
-                <a
-                  href="../pages/sign-in.html"
-                  class="nav-link text-body font-weight-bold px-0"
-                >
-                  <i class="material-symbols-rounded">account_circle</i>
-                </a>
+                <!-- Button or Link to Open Modal -->
+    <a href="#" class="nav-link text-body font-weight-bold px-0" data-bs-toggle="modal" data-bs-target="#myModal">
+      <i class="material-symbols-rounded">account_circle</i>
+  </a>
               </li>
             </ul>
           </div>
         </div>
       </nav>
+
+
+<!-- Bootstrap Customer Profile Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true">
+
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h5 class="modal-title" id="customerProfileLabel">Admin Profile</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="modal-body">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Profile Details</h5>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="profile-item">
+                  <strong>Admin ID:</strong> <span id="customerId"></span>
+                </div>
+                <div class="profile-item">
+                  <strong>Name:</strong> <span id="userName"></span>
+                </div>
+                <div class="profile-item">
+                  <strong>Location:</strong> <span id="customerLocation"></span>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="profile-item">
+                  <strong>Phone:</strong> <span id="phone_number"></span>
+                </div>
+                <div class="profile-item">
+                  <strong>Email:</strong> <span id="userEmail"></span>
+                </div>
+              </div>
+            </div>
+            <div class="text-end mt-3">
+              <button class="btn btn-danger" id="logoutBtn">Logout</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Button to Trigger the Modal -->
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#customerProfileModal">
+  Open Customer Profile
+</button>
+
+
+
       <!-- End Navbar -->
       <div class="container-fluid py-2">
         <div class="row">
@@ -1607,7 +1673,7 @@
         async function fetchData() {
           try {
             const response = await fetch(
-              "https://backend-api-dtwc.onrender.com/api/manufacturer/customer-requirements"
+              "http://localhost:5000/api/manufacturer/customer-requirements"
             );
             if (!response.ok)
               throw new Error(`HTTP error! Status: ${response.status}`);
@@ -1652,7 +1718,7 @@
 
   async function fetchOrders() {
             try {
-                const response = await fetch('https://backend-api-dtwc.onrender.com/api/manufacturer/orders');
+                const response = await fetch('http://localhost:5000/api/manufacturer/orders');
                 const orders = await response.json();
                 const tableBody = document.querySelector("#projectsTable tbody");
                 tableBody.innerHTML = "";
@@ -1765,7 +1831,7 @@
 
             try {
                 const response = await fetch(
-                    `https://backend-api-dtwc.onrender.com/api/manufacturer/update-approval/${orderId}`,
+                    `http://localhost:5000/api/manufacturer/update-approval/${orderId}`,
                     {
                         method: "PUT",
                         headers: { "Content-Type": "application/json" },
@@ -1870,7 +1936,7 @@
 
       try {
           // ✅ Fetch user details from backend using email
-          const response = await fetch(`https://backend-api-dtwc.onrender.com/api/manufacturer/user/${userEmail}`);
+          const response = await fetch(`http://localhost:5000/api/manufacturer/user/${userEmail}`);
 
           if (!response.ok) {
               throw new Error("Failed to fetch user data");
@@ -1891,7 +1957,7 @@
   });
   document.getElementById("logoutBtn").addEventListener("click", async function () {
       try {
-          const response = await fetch("https://backend-api-dtwc.onrender.com/api/manufacturer/logout", {
+          const response = await fetch("http://localhost:5000/api/manufacturer/logout", {
               method: "POST",
               credentials: "include",
           });
@@ -1905,6 +1971,193 @@
           console.error("Error logging out:", error);
       }
   });
+
+
+
+
+//   async function fetchApprovedProjects() {
+//   try {
+//     // ✅ Use local backend API URL
+//     const response = await fetch("http://localhost:5000/api/manufacturer/approved-requirements"); // Change to your local port if different
+//     const data = await response.json();
+
+//     const tableBody = document.querySelector("#approvedProjectsTable tbody");
+//     tableBody.innerHTML = ""; // Clear existing data before inserting new rows
+
+//     if (data.length === 0) {
+//       tableBody.innerHTML = `<tr><td colspan="7" class="text-center">No approved projects found.</td></tr>`;
+//       return;
+//     }
+
+//     data.forEach((project) => {
+//       const row = `<tr>
+//         <td><h6 class="mb-0 text-sm">${project.order_id}</h6></td>
+//         <td><h6 class="mb-0 text-sm">${project.cname}</h6></td>
+//         <td><h6 class="mb-0 text-sm">${project.pname}</h6></td>
+//         <td><h6 class="mb-0 text-sm">${project.Part_Name}</h6></td>
+//         <td><h6 class="py-1 text-sm">${project.category}</h6></td>
+//         <td class="text-center"><i class="fa fa-check-circle text-success"> Approved</i></td>
+//         <td class="text-center">
+//           <a href="http://localhost:5000/project-details/${project.order_id}">
+//             <button type="button" class="btn btn-primary">View</button>
+//           </a>
+//         </td>
+//       </tr>`;
+
+//       tableBody.innerHTML += row;
+//     });
+//   } catch (error) {
+//     console.error("Error fetching approved projects:", error);
+//   }
+// }
+
+// // ✅ Call the function when the page loads
+// window.onload = fetchApprovedProjects;
+
+async function fetchApprovedProjects() {
+            try {
+                // ✅ Using localhost instead of Render
+                const response = await fetch("http://localhost:5000/api/manufacturer/approved-requirements"); 
+                const data = await response.json();
+
+                const tableBody = document.querySelector("#approvedProjectsTable");
+                tableBody.innerHTML = ""; // Clear table before inserting new rows
+
+                if (data.length === 0) {
+                    tableBody.innerHTML = `<tr><td colspan="7" class="text-center">No approved projects found.</td></tr>`;
+                    return;
+                }
+
+                 // Count approved projects
+        let approvedCount = data.filter(project => project.isApproved).length;
+        document.getElementById("approvedCount").innerText = approvedCount;
+
+                data.forEach((project) => {
+                    const row = `<tr>
+                        <td><h6 class="mb-0 text-sm">${project.order_id}</h6></td>
+                        <td><h6 class="mb-0 text-sm">${project.cname}</h6></td>
+                        <td><h6 class="mb-0 text-sm">${project.pname}</h6></td>
+                        <td><h6 class="mb-0 text-sm">${project.Part_Name}</h6></td>
+                        <td><h6 class="py-1 text-sm">${project.category}</h6></td>
+                        <td class="text-center"><i class="fa fa-check-circle text-success"> Approved</i></td>
+                        <td class="text-center">
+                            <button class="btn btn-info" onclick='openModal(${JSON.stringify(project)})'>View</button>
+                        </td>
+                    </tr>`;
+
+                    tableBody.innerHTML += row;
+                });
+            } catch (error) {
+                console.error("Error fetching approved projects:", error);
+            }
+        }
+
+        function openModal(order) {
+            const existingModal = document.getElementById("orderModal");
+            if (existingModal) existingModal.remove();
+
+            const modalHtml = `
+                <div class="modal fade" id="orderModal" tabindex="-1" aria-labelledby="orderModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Order Details</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Order Information</h5>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <p><strong>Customer ID:</strong> ${order.customer_id}</p>
+                                                <p><strong>Project ID:</strong> ${order.order_id}</p>
+                                                <p><strong>Company Name:</strong> ${order.cname}</p>
+                                                <p><strong>Project Name:</strong> ${order.pname}</p>
+                                                <p><strong>Part Name:</strong> ${order.Part_Name}</p>
+                                                <p><strong>Category:</strong> ${order.category}</p>
+                                                <p><strong>Email:</strong> ${order.email}</p>
+                                                <p><strong>Phone Number:</strong> ${order.phone_number}</p>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <p><strong>Part Number:</strong> ${order.cpno}</p>
+                                                <p><strong>Target Value:</strong> ${order.tv}</p>
+                                                <p><strong>Annual Volume:</strong> ${order.av}</p>
+                                                <p><strong>Quote Submission:</strong> ${new Date(order.qs).toLocaleDateString()}</p>
+                                                <p><strong>Start of Production:</strong> ${new Date(order.sop).toLocaleDateString()}</p>
+                                                <p><strong>Status:</strong> ${order.working_status}</p>
+                                                <p><strong>Supplier:</strong> ${order.supplier_name}</p>
+                                                <p><strong>Approval:</strong> ${order.isApproved ? 'Approved' : 'Disapproved'}</p>
+                                            </div>
+                                        </div>
+
+                                        ${order.pdf_file && order.pdf_file.trim() !== ""
+                                            ? `<div class="mt-3 text-center">
+                                                    <a href="${order.pdf_file}" download class="btn btn-success">
+                                                        <i class="fas fa-file-download"></i> Download File
+                                                    </a>
+                                                </div>`
+                                            : `<p class="text-muted text-center mt-3">No file available</p>`}
+
+                                        <div class="mt-3">
+                                            <h6>Approval Status</h6>
+                                            <label class="me-3">
+                                                <input type="radio" name="approval" value="approved" ${order.isApproved === true ? "checked" : ""}> Yes (Approved)
+                                            </label>
+                                            <label>
+                                                <input type="radio" name="approval" value="disapproved" ${order.isApproved === false ? "checked" : ""}> No (Disapproved)
+                                            </label>
+                                        </div>
+
+                                        <div class="text-end mt-3">
+                                            <button class="btn btn-success" onclick="updateApprovalStatus('${order._id}')">Save</button>
+                                            <button class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>`;
+
+            document.body.insertAdjacentHTML("beforeend", modalHtml);
+            new bootstrap.Modal(document.getElementById("orderModal")).show();
+        }
+
+        async function updateApprovalStatus(orderId) {
+            const selectedRadio = document.querySelector("input[name='approval']:checked");
+            if (!selectedRadio) {
+                alert("Please select an approval status.");
+                return;
+            }
+
+            const isApproved = selectedRadio.value === "approved";
+
+            try {
+                const response = await fetch(
+                    `http://localhost:5000/api/manufacturer/update-approval/${orderId}`, // ✅ Localhost instead of Render
+                    {
+                        method: "PUT",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ isApproved }),
+                    }
+                );
+
+                if (response.ok) {
+                    alert("Approval status updated successfully!");
+                    location.reload();
+                } else {
+                    const errorData = await response.json();
+                    alert(`Failed to update approval status: ${errorData.message || "Unknown error"}`);
+                }
+            } catch (error) {
+                alert("An error occurred while updating approval status.");
+            }
+        }
+
+        // ✅ Fetch data when the page loads
+        window.onload = fetchApprovedProjects;
+
 </script>
 
 
