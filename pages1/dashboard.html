@@ -572,7 +572,7 @@
         try {
           // ✅ Fetch user details from backend using email
           const response = await fetch(
-            `http://localhost:5000/api/manufacturer/user/${userEmail}`
+            `https://backend-api-k9ts.onrender.com/api/manufacturer/user/${userEmail}`
           );
 
           if (!response.ok) {
@@ -600,7 +600,7 @@
         .addEventListener("click", async function () {
           try {
             const response = await fetch(
-              "http://localhost:5000/api/manufacturer/logout",
+              "https://backend-api-k9ts.onrender.com/api/manufacturer/logout",
               {
                 method: "POST",
                 credentials: "include",
@@ -620,7 +620,7 @@
       async function fetchApprovedProjects() {
         try {
           const response = await fetch(
-            "http://localhost:5000/api/manufacturer/approved-requirements"
+            "https://backend-api-k9ts.onrender.com/api/manufacturer/approved-requirements"
           );
           const data = await response.json();
 
@@ -666,7 +666,7 @@
       async function fetchProjects() {
         try {
           const response = await fetch(
-            "http://localhost:5000/api/manufacturer/customer-requirements"
+            "https://backend-api-k9ts.onrender.com/api/manufacturer/customer-requirements"
           );
           if (!response.ok)
             throw new Error(`HTTP error! Status: ${response.status}`);
@@ -906,7 +906,7 @@
 
         try {
           const response = await fetch(
-            `http://localhost:5000/api/manufacturer/update-approval/${orderId}`,
+            `https://backend-api-k9ts.onrender.com/api/manufacturer/update-approval/${orderId}`,
             {
               method: "PUT",
               headers: { "Content-Type": "application/json" },
