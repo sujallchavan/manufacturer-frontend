@@ -3,71 +3,668 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Login</title>
+    <title>Admin Portal | Inventory Management System</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+    />
     <style>
+      :root {
+        /* Vibrant Admin Theme - Teal/Green with Purple Accents */
+        --primary: #43a047; /* Vibrant green */
+        --primary-light: #76d275;
+        --primary-dark: #00701a;
+        --secondary: #7b1fa2; /* Purple */
+        --secondary-light: #ae52d4;
+        --secondary-dark: #4a0072;
+        --accent: #00acc1; /* Teal */
+        --accent-light: #5ddef4;
+        --accent-dark: #007c91;
+        --light: #f1f8e9; /* Light green background */
+        --dark: #2e7d32; /* Dark green */
+        --dark-light: #5a9e5e;
+        --gray: #616161;
+        --white: #ffffff;
+        --card-shadow: 0 8px 32px rgba(67, 160, 71, 0.15);
+        --hover-shadow: 0 12px 40px rgba(67, 160, 71, 0.25);
+        --text-gradient: linear-gradient(135deg, var(--primary), var(--accent));
+        --success: #4caf50;
+        --warning: #ff9800;
+        --danger: #f44336;
+        --info: #2196f3;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Poppins", -apple-system, BlinkMacSystemFont, sans-serif;
+      }
+
       body {
-        font-family: Arial, sans-serif;
-        background-color: #f4f4f4;
-        text-align: center;
+        background: linear-gradient(135deg, var(--light) 0%, #e8f5e9 100%);
+        min-height: 100vh;
+        overflow-x: hidden;
       }
-      .login-container {
-        width: 300px;
-        margin: 100px auto;
-        background: white;
-        padding: 20px;
-        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-        border-radius: 8px;
+
+      .hero-container {
+        display: flex;
+        min-height: 100vh;
+        position: relative;
+        overflow: hidden;
       }
-      input {
+
+      .hero-content {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 0 8%;
+        position: relative;
+        z-index: 2;
+      }
+
+      .hero-image {
+        flex: 1;
+        background: url("https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80")
+          no-repeat center center;
+        background-size: cover;
+        position: relative;
+        display: none;
+        animation: fadeInRight 1s ease;
+      }
+
+      .hero-image::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
         width: 100%;
-        padding: 10px;
-        margin: 10px 0;
-        border: 1px solid #ccc;
-        border-radius: 5px;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          rgba(241, 248, 233, 0.9) 0%,
+          rgba(241, 248, 233, 0.3) 100%
+        );
       }
-      button {
-        width: 100%;
-        padding: 10px;
-        background: blue;
-        color: white;
-        border: none;
-        border-radius: 5px;
+
+      h1 {
+        font-size: 3.5rem;
+        font-weight: 800;
+        line-height: 1.2;
+        margin-bottom: 1.5rem;
+        background: var(--text-gradient);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        display: inline-block;
+        position: relative;
+      }
+
+      h1::after {
+        content: "";
+        position: absolute;
+        bottom: -10px;
+        left: 0;
+        width: 70px;
+        height: 4px;
+        background: var(--text-gradient);
+        border-radius: 2px;
+      }
+
+      p.subtitle {
+        font-size: 1.25rem;
+        color: var(--gray);
+        margin-bottom: 2.5rem;
+        max-width: 600px;
+        line-height: 1.6;
+        position: relative;
+        padding-left: 20px;
+      }
+
+      p.subtitle::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 8px;
+        height: 60%;
+        width: 3px;
+        background: var(--accent);
+        border-radius: 3px;
+      }
+
+      .btn-group {
+        display: flex;
+        gap: 1rem;
+        margin-top: 1rem;
+        flex-wrap: wrap;
+      }
+
+      .btn {
+        padding: 0.8rem 2rem;
+        border-radius: 50px;
+        font-size: 1rem;
+        font-weight: 600;
         cursor: pointer;
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: var(--card-shadow);
+        position: relative;
+        overflow: hidden;
+        border: none;
+      }
+
+      .btn::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.2),
+          transparent
+        );
+        transition: 0.5s;
+      }
+
+      .btn:hover::before {
+        left: 100%;
+      }
+
+      .btn-primary {
+        background-color: var(--primary);
+        color: var(--white);
+      }
+
+      .btn-primary:hover {
+        background-color: var(--primary-dark);
+        transform: translateY(-3px);
+        box-shadow: var(--hover-shadow);
+      }
+
+      .btn-secondary {
+        background-color: transparent;
+        color: var(--secondary);
+        border: 2px solid var(--secondary);
+      }
+
+      .btn-secondary:hover {
+        background-color: rgba(123, 31, 162, 0.1);
+        transform: translateY(-3px);
+        box-shadow: 0 12px 40px rgba(123, 31, 162, 0.25);
+      }
+
+      .features {
+        display: flex;
+        gap: 2rem;
+        margin-top: 3rem;
+        flex-wrap: wrap;
+      }
+
+      .feature {
+        flex: 1;
+        min-width: 200px;
+        background: var(--white);
+        padding: 1.5rem;
+        border-radius: 12px;
+        box-shadow: var(--card-shadow);
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        border: 1px solid rgba(67, 160, 71, 0.1);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .feature::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 3px;
+        height: 100%;
+        background: var(--text-gradient);
+        transition: width 0.3s ease;
+      }
+
+      .feature:hover::before {
+        width: 5px;
+      }
+
+      .feature:hover {
+        transform: translateY(-10px);
+        box-shadow: var(--hover-shadow);
+      }
+
+      .feature-icon {
+        font-size: 2rem;
+        margin-bottom: 1rem;
+        background: var(--text-gradient);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      .feature-title {
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        color: var(--dark);
+      }
+
+      .feature-text {
+        color: var(--gray);
+        font-size: 0.9rem;
+        line-height: 1.5;
+      }
+
+      #loginForm {
+        background: var(--white);
+        padding: 2.5rem;
+        border-radius: 15px;
+        box-shadow: var(--hover-shadow);
+        max-width: 450px;
+        margin-top: 2rem;
+        display: none;
+        border: 1px solid rgba(67, 160, 71, 0.2);
+        position: relative;
+        overflow: hidden;
+      }
+
+      #loginForm::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 5px;
+        background: var(--text-gradient);
+      }
+
+      #loginForm.active {
+        display: block;
+        animation: fadeInUp 0.5s ease;
+      }
+
+      .form-group {
+        margin-bottom: 1.5rem;
+        position: relative;
+      }
+
+      .form-group label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 500;
+        color: var(--dark);
+      }
+
+      .form-group input {
+        width: 100%;
+        padding: 0.8rem 1rem;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        background: rgba(241, 248, 233, 0.5);
+      }
+
+      .form-group input:focus {
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px rgba(67, 160, 71, 0.2);
+        outline: none;
+      }
+
+      .form-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 1rem;
+        font-size: 0.9rem;
+      }
+
+      .forgot-password {
+        color: var(--gray);
+        text-decoration: none;
+        transition: color 0.3s ease;
+      }
+
+      .forgot-password:hover {
+        color: var(--primary);
+        text-decoration: underline;
+      }
+
+      #message {
+        margin-top: 1rem;
+        padding: 0.8rem;
+        border-radius: 8px;
+        font-size: 0.9rem;
+        display: none;
+      }
+
+      .error {
+        background-color: #ffebee;
+        color: var(--danger);
+        display: block;
+        border-left: 4px solid var(--danger);
+      }
+
+      .success {
+        background-color: #e8f5e9;
+        color: var(--success);
+        display: block;
+        border-left: 4px solid var(--success);
+      }
+
+      .floating-shapes {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        z-index: 1;
+      }
+
+      .shape {
+        position: absolute;
+        opacity: 0.08;
+        border-radius: 50%;
+        filter: blur(20px);
+      }
+
+      .shape-1 {
+        width: 300px;
+        height: 300px;
+        background: var(--primary);
+        top: -100px;
+        left: -100px;
+        animation: float 15s infinite ease-in-out;
+      }
+
+      .shape-2 {
+        width: 200px;
+        height: 200px;
+        background: var(--secondary);
+        bottom: -50px;
+        right: -50px;
+        animation: float 12s infinite ease-in-out reverse;
+      }
+
+      .shape-3 {
+        width: 150px;
+        height: 150px;
+        background: var(--accent);
+        top: 40%;
+        right: 20%;
+        animation: float 10s infinite ease-in-out 2s;
+      }
+
+      /* Mobile-specific styles */
+      @media (max-width: 768px) {
+        h1 {
+          font-size: 2.5rem;
+        }
+
+        .subtitle {
+          font-size: 1rem;
+        }
+
+        .btn {
+          padding: 0.7rem 1.5rem;
+          font-size: 0.9rem;
+        }
+
+        .feature {
+          min-width: 100%;
+        }
+
+        #loginForm {
+          padding: 1.5rem;
+          margin-top: 1rem;
+        }
+
+        .hero-content {
+          padding: 0 5%;
+        }
+      }
+
+      @media (min-width: 992px) {
+        .hero-image {
+          display: block;
+        }
+
+        h1 {
+          font-size: 4rem;
+        }
+      }
+
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes fadeInRight {
+        from {
+          opacity: 0;
+          transform: translateX(50px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+
+      @keyframes float {
+        0%,
+        100% {
+          transform: translateY(0) translateX(0);
+        }
+        50% {
+          transform: translateY(-20px) translateX(20px);
+        }
       }
     </style>
   </head>
   <body>
-    <div class="login-container">
-      <h2>Login</h2>
-      <input type="email" id="email" placeholder="Email" />
-      <input type="password" id="password" placeholder="Password" />
-      <a href="pages1/dashboard.html"
-        ><button onclick="login()">Login</button></a
-      >
-      <p id="message"></p>
+    <div class="hero-container">
+      <div class="floating-shapes">
+        <div class="shape shape-1"></div>
+        <div class="shape shape-2"></div>
+        <div class="shape shape-3"></div>
+      </div>
+
+      <div class="hero-content">
+        <h1 class="animate__animated animate__fadeInDown">
+          Admin Control Center
+        </h1>
+        <p class="subtitle animate__animated animate__fadeIn animate__delay-1s">
+          Manage your entire supply chain with powerful administrative tools and
+          real-time analytics.
+        </p>
+
+        <div
+          class="btn-group animate__animated animate__fadeIn animate__delay-1s"
+        >
+          <button id="showLogin" class="btn btn-primary">
+            <i class="fas fa-sign-in-alt"></i> Admin Login
+          </button>
+          <a href="#" class="btn btn-secondary">
+            <i class="fas fa-question-circle"></i> Help Center
+          </a>
+        </div>
+
+        <div
+          class="features animate__animated animate__fadeIn animate__delay-2s"
+        >
+          <div class="feature">
+            <div class="feature-icon">📊</div>
+            <h3 class="feature-title">Dashboard Analytics</h3>
+            <p class="feature-text">
+              Comprehensive insights into supplier performance, order status,
+              and inventory levels.
+            </p>
+          </div>
+          <div class="feature">
+            <div class="feature-icon">🔒</div>
+            <h3 class="feature-title">Secure Access</h3>
+            <p class="feature-text">
+              Enterprise-grade security with role-based access control and
+              activity logging.
+            </p>
+          </div>
+          <div class="feature">
+            <div class="feature-icon">⚙️</div>
+            <h3 class="feature-title">System Controls</h3>
+            <p class="feature-text">
+              Configure workflows, approval processes, and notification
+              settings.
+            </p>
+          </div>
+        </div>
+
+        <form id="loginForm">
+          <div class="animated-border"></div>
+          <h2 style="margin-bottom: 1.5rem; color: var(--dark)">
+            Admin Authentication
+          </h2>
+
+          <div class="form-group">
+            <label for="email">Admin Email</label>
+            <input
+              type="email"
+              id="email"
+              placeholder="admin@yourcompany.com"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input
+              type="password"
+              id="password"
+              placeholder="Enter your password"
+              required
+            />
+          </div>
+
+          <button type="submit" class="btn btn-primary" style="width: 100%">
+            <i class="fas fa-lock"></i> Secure Login
+          </button>
+
+          <div class="form-footer">
+            <a href="#" class="forgot-password">Reset password</a>
+            <span
+              >Need help?
+              <a href="#" style="color: var(--primary)"
+                >Contact support</a
+              ></span
+            >
+          </div>
+
+          <div id="message"></div>
+        </form>
+      </div>
+
+      <div class="hero-image"></div>
     </div>
-    <a href="pages1/sign-in.html">
-      <button type="button">orginal sign-in.html</button></a
-    >
+
+    <!-- Font Awesome for icons -->
+    <script
+      src="https://kit.fontawesome.com/a076d05399.js"
+      crossorigin="anonymous"
+    ></script>
 
     <script>
-      function login() {
-        const email = document.getElementById("email").value;
-        const password = document.getElementById("password").value;
+      // Show login form
+      document
+        .getElementById("showLogin")
+        .addEventListener("click", function () {
+          document.getElementById("loginForm").classList.add("active");
+          document.querySelector(".btn-group").style.display = "none";
+          document.querySelector(".features").style.display = "none";
+          document.querySelector("h1").textContent = "Admin Portal";
+          document.querySelector("p.subtitle").textContent =
+            "Enter your credentials to access the administration dashboard";
+        });
 
-        fetch("https://backend-api-3qcm.onrender.com/api/login", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ email, password }),
-        })
-          .then((res) => res.json())
-          .then((data) => {
-            document.getElementById("message").innerText = data.message;
-          })
-          .catch((err) => console.error(err));
+      // Handle login form submission
+      document
+        .getElementById("loginForm")
+        .addEventListener("submit", async function (e) {
+          e.preventDefault();
+
+          const email = document.getElementById("email").value;
+          const password = document.getElementById("password").value;
+          const message = document.getElementById("message");
+
+          // Clear previous messages
+          message.style.display = "none";
+          message.className = "";
+
+          try {
+            const res = await fetch(
+              "https://backend-api-3qcm.onrender.com/api/manufacturer/login",
+              {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email, password }),
+                credentials: "include",
+              }
+            );
+
+            const data = await res.json();
+
+            if (res.status === 200) {
+              console.log("✅ Logged-in Admin Data:", data.admin);
+
+              // Store admin details in sessionStorage
+              sessionStorage.setItem("admin", JSON.stringify(data.admin));
+
+              // Show success message
+              message.textContent = `Welcome, ${
+                data.admin.name || "Administrator"
+              }! Redirecting...`;
+              message.className = "success";
+              message.style.display = "block";
+
+              // Redirect after delay
+              setTimeout(() => {
+                window.location.href = "dashboard.html";
+              }, 1500);
+            } else {
+              message.textContent = data.msg || "Invalid credentials";
+              message.className = "error";
+              message.style.display = "block";
+            }
+          } catch (error) {
+            message.textContent = "Network error. Please try again.";
+            message.className = "error";
+            message.style.display = "block";
+            console.error("Login error:", error);
+          }
+        });
+
+      // Mobile responsiveness - adjust layout on resize
+      function handleResize() {
+        if (window.innerWidth < 768) {
+          // Mobile-specific adjustments
+          document.querySelector(".btn-group").style.flexDirection = "column";
+        } else {
+          document.querySelector(".btn-group").style.flexDirection = "row";
+        }
       }
+
+      // Initial check and event listener
+      window.addEventListener("resize", handleResize);
+      handleResize();
     </script>
   </body>
 </html>
