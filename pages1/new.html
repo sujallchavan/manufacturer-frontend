@@ -100,11 +100,6 @@
         min-width: 600px;
       }
 
-      .search-box {
-        max-width: 300px;
-        margin-left: auto;
-      }
-
       .badge-customer {
         background-color: #4e73df;
       }
@@ -166,6 +161,134 @@
         background-color: #45a049;
       }
 
+      /* Table header styles for mobile */
+      .table-header-mobile {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .table-header-mobile .search-row {
+        order: 2; /* Move search below title on mobile */
+      }
+
+      @media (min-width: 768px) {
+        .table-header-mobile {
+          flex-direction: row;
+          justify-content: space-between;
+          align-items: center;
+        }
+
+        .table-header-mobile .search-row {
+          order: initial; /* Reset order for desktop */
+        }
+      }
+
+      /* Search box styles */
+      .search-box {
+        max-width: 100%;
+      }
+
+      @media (min-width: 768px) {
+        .search-box {
+          max-width: 300px;
+          margin-left: auto;
+        }
+      }
+
+      /* Enhanced Pagination Styles */
+      .pagination-container {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+      }
+
+      .pagination {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 5px;
+        justify-content: center;
+        padding: 0;
+        list-style: none;
+      }
+
+      .page-item {
+        margin: 0 2px;
+      }
+
+      .page-link {
+        border-radius: 6px !important;
+        min-width: 40px;
+        text-align: center;
+        border: 1px solid #dee2e6;
+        color: #495057;
+        transition: all 0.2s;
+        padding: 0.5rem 0.75rem;
+        display: block;
+        text-decoration: none;
+      }
+
+      .page-link:hover {
+        background-color: #f8f9fa;
+        color: #43a047;
+      }
+
+      .page-item.active .page-link {
+        background-color: #43a047;
+        border-color: #43a047;
+        color: white;
+      }
+
+      .page-item.disabled .page-link {
+        color: #6c757d;
+        pointer-events: none;
+        background-color: #fff;
+        border-color: #dee2e6;
+      }
+
+      /* Mobile-specific styles */
+      @media (max-width: 576px) {
+        .pagination {
+          gap: 3px;
+        }
+
+        .page-link {
+          min-width: 32px;
+          padding: 0.375rem 0.5rem;
+          font-size: 0.875rem;
+        }
+
+        /* Hide all page numbers except active and neighbors */
+        .page-item:not(.active):not(.disabled):not(:first-child):not(
+            :last-child
+          ):not(.prev):not(.next) {
+          display: none;
+        }
+
+        /* Style prev/next buttons with icons */
+        .page-item.prev .page-link::before {
+          content: "«";
+        }
+
+        .page-item.next .page-link::before {
+          content: "»";
+        }
+
+        .page-item.prev .page-link span,
+        .page-item.next .page-link span {
+          display: none;
+        }
+
+        /* Ensure essential items are always visible */
+        .page-item.active,
+        .page-item.disabled,
+        .page-item:first-child,
+        .page-item:last-child,
+        .page-item.prev,
+        .page-item.next {
+          display: block;
+        }
+      }
+
       /* Mobile Styles */
       @media (max-width: 992px) {
         .sidebar {
@@ -199,6 +322,11 @@
         .search-box {
           max-width: 100%;
           margin-top: 10px;
+        }
+
+        /* Adjust table columns for mobile */
+        .mobile-hidden {
+          display: none;
         }
       }
 
@@ -234,6 +362,56 @@
       }
       .hamburger.close-sidebar span:nth-child(3) {
         transform: rotate(-45deg) translate(5px, -5px);
+      }
+
+      /* Enhanced Pagination for Mobile */
+      @media (max-width: 767px) {
+        .pagination {
+          flex-wrap: wrap;
+          gap: 4px;
+          justify-content: center;
+        }
+
+        .page-item {
+          margin: 0;
+        }
+
+        .page-link {
+          min-width: 32px;
+          padding: 0.375rem 0.5rem;
+          font-size: 0.875rem;
+        }
+
+        /* Show only essential items on mobile */
+        .page-item:not(.active):not(.disabled):not(:first-child):not(
+            :last-child
+          ):not(.prev):not(.next) {
+          display: none;
+        }
+
+        /* Style prev/next buttons */
+        .page-item.prev .page-link::before {
+          content: "«";
+        }
+
+        .page-item.next .page-link::before {
+          content: "»";
+        }
+
+        .page-item.prev .page-link span,
+        .page-item.next .page-link span {
+          display: none;
+        }
+
+        /* Ensure first, last, prev, next are always visible */
+        .page-item.active,
+        .page-item.disabled,
+        .page-item:first-child,
+        .page-item:last-child,
+        .page-item.prev,
+        .page-item.next {
+          display: block;
+        }
       }
     </style>
   </head>
@@ -283,7 +461,6 @@
     <!-- Overlay for mobile sidebar -->
     <div class="overlay"></div>
 
-    <!-- Sidebar -->
     <!-- Sidebar -->
     <div class="sidebar col-md-3 col-lg-2 d-md-block">
       <div class="p-3">
@@ -499,30 +676,35 @@
       <!-- Customers Section -->
       <div class="card mt-4 p-3">
         <!-- Header -->
-        <div
-          class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-3"
-        >
-          <h5 class="d-flex align-items-center mb-2 mb-md-0">
-            <span class="badge bg-primary text-white me-2">C</span> Customers
-          </h5>
-          <button class="btn btn-primary" onclick="openAddCustomerModal()">
-            <i class="material-symbols-rounded me-1">add</i>
-            Add Customer
-          </button>
-        </div>
-
-        <!-- Search Bar -->
-        <div class="input-group mb-4">
-          <span class="input-group-text border-primary text-primary bg-white">
-            <i class="material-symbols-rounded">search</i>
-          </span>
-          <input
-            type="text"
-            id="customerSearch"
-            class="form-control border-primary"
-            placeholder="Search by name, email, location..."
-            onkeyup="searchTable('customerSearch', 'customerTableBody')"
-          />
+        <div class="table-header-mobile">
+          <div
+            class="d-flex justify-content-between align-items-center mb-2 mb-md-0"
+          >
+            <h5 class="d-flex align-items-center mb-2 mb-md-0">
+              <span class="badge bg-primary text-white me-2">C</span> Customers
+            </h5>
+            <button class="btn btn-primary" onclick="openAddCustomerModal()">
+              <i class="material-symbols-rounded me-1">add</i>
+              <span class="d-none d-md-inline">Add Customer</span>
+              <span class="d-md-none">Add</span>
+            </button>
+          </div>
+          <div class="search-row">
+            <div class="input-group">
+              <span
+                class="input-group-text border-primary text-primary bg-white"
+              >
+                <i class="material-symbols-rounded">search</i>
+              </span>
+              <input
+                type="text"
+                id="customerSearch"
+                class="form-control border-primary"
+                placeholder="Search customers..."
+                onkeyup="searchTable('customerSearch', 'customerTableBody')"
+              />
+            </div>
+          </div>
         </div>
 
         <!-- Table -->
@@ -533,8 +715,8 @@
                 <th>Customer ID</th>
                 <th>Name</th>
                 <th>Email</th>
-                <th>Location</th>
-                <th>Phone Number</th>
+                <th class="mobile-hidden">Location</th>
+                <th class="mobile-hidden">Phone</th>
                 <th>Actions</th>
               </tr>
             </thead>
@@ -543,89 +725,75 @@
             </tbody>
           </table>
         </div>
+        <div class="pagination-container">
+          <nav aria-label="Customer pagination">
+            <ul class="pagination" id="customerPagination">
+              <!-- Pagination will be added by JavaScript -->
+            </ul>
+          </nav>
+        </div>
       </div>
 
       <!-- Suppliers Table -->
-      <div class="card mt-4">
-        <div
-          class="card-header d-flex justify-content-between align-items-center"
-        >
-          <h5 class="mb-0">
-            <span class="badge badge-supplier text-white me-2">S</span>
-            Suppliers
-          </h5>
-
-          <button
-            class="btn btn-sm btn-primary"
-            onclick="openAddSupplierModal()"
+      <div class="card mt-4 p-3">
+        <div class="table-header-mobile">
+          <div
+            class="d-flex justify-content-between align-items-center mb-2 mb-md-0"
           >
-            <i class="material-symbols-rounded me-1">add</i>
-            Add Supplier
-          </button>
+            <h5 class="mb-0">
+              <span class="badge badge-supplier text-white me-2">S</span>
+              Suppliers
+            </h5>
+            <button class="btn btn-primary" onclick="openAddSupplierModal()">
+              <i class="material-symbols-rounded me-1">add</i>
+              <span class="d-none d-md-inline">Add Supplier</span>
+              <span class="d-md-none">Add</span>
+            </button>
+          </div>
+          <div class="search-row">
+            <div class="input-group">
+              <span
+                class="input-group-text border-primary text-primary bg-white"
+              >
+                <i class="material-symbols-rounded">search</i>
+              </span>
+              <input
+                type="text"
+                id="supplierSearch"
+                class="form-control border-primary"
+                placeholder="Search suppliers..."
+                onkeyup="searchTable('supplierSearch', 'supplierTableBody')"
+              />
+            </div>
+          </div>
         </div>
 
-        <div class="card-body">
-          <!-- Search Bar -->
-          <div class="input-group mb-3">
-            <span class="input-group-text border-primary text-primary bg-white">
-              <i class="material-symbols-rounded">search</i>
-            </span>
-            <input
-              type="text"
-              id="supplierSearch"
-              class="form-control border-primary"
-              placeholder="Search by name, email, location..."
-              onkeyup="searchTable('supplierSearch', 'supplierTableBody')"
-            />
-          </div>
-
-          <!-- Supplier Table -->
-          <div class="table-responsive">
-            <table class="table table-hover" id="supplierTable">
-              <thead class="table-light">
-                <tr>
-                  <th>Supplier ID</th>
-                  <th>Name</th>
-                  <th>Email</th>
-                  <th>Category</th>
-                  <th>Company</th>
-                  <th>Location</th>
-                  <th>Phone</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody id="supplierTableBody">
-                <!-- Example rows (replace with dynamic data) -->
-                <tr>
-                  <td>1001</td>
-                  <td>Raj Patel</td>
-                  <td>raj@example.com</td>
-                  <td>Electrical</td>
-                  <td>BrightTech</td>
-                  <td>Mumbai</td>
-                  <td>9876543210</td>
-                  <td>
-                    <button class="btn btn-sm btn-primary">Edit</button>
-                    <button class="btn btn-sm btn-danger">Delete</button>
-                  </td>
-                </tr>
-                <tr>
-                  <td>1002</td>
-                  <td>Sunita Rao</td>
-                  <td>sunita@example.com</td>
-                  <td>Mechanical</td>
-                  <td>GearWorks</td>
-                  <td>Pune</td>
-                  <td>9123456780</td>
-                  <td>
-                    <button class="btn btn-sm btn-primary">Edit</button>
-                    <button class="btn btn-sm btn-danger">Delete</button>
-                  </td>
-                </tr>
-                <!-- Add more supplier rows dynamically -->
-              </tbody>
-            </table>
-          </div>
+        <!-- Supplier Table -->
+        <div class="table-responsive">
+          <table class="table table-hover" id="supplierTable">
+            <thead class="table-light">
+              <tr>
+                <th>Supplier ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th class="mobile-hidden">Category</th>
+                <th class="mobile-hidden">Company</th>
+                <th class="mobile-hidden">Location</th>
+                <th class="mobile-hidden">Phone</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="supplierTableBody">
+              <!-- Supplier rows go here -->
+            </tbody>
+          </table>
+        </div>
+        <div class="pagination-container">
+          <nav aria-label="Supplier pagination">
+            <ul class="pagination" id="supplierPagination">
+              <!-- Pagination will be added by JavaScript -->
+            </ul>
+          </nav>
         </div>
       </div>
     </div>
@@ -1001,6 +1169,13 @@
 
     <!-- JavaScript Functions -->
     <script>
+      // Global variables for pagination
+      const rowsPerPage = 5;
+      let currentCustomerPage = 1;
+      let currentSupplierPage = 1;
+      let allCustomers = [];
+      let allSuppliers = [];
+
       // Mobile sidebar toggle
       document
         .querySelector(".open-sidebar")
@@ -1027,6 +1202,150 @@
         document.getElementById("supplierCount").textContent = suppliers.length;
       }
 
+      // Setup pagination for a table
+      function setupPagination(
+        tableId,
+        paginationId,
+        data,
+        currentPage,
+        rowsPerPage,
+        renderFunction
+      ) {
+        const pagination = document.getElementById(paginationId);
+        pagination.innerHTML = "";
+
+        const pageCount = Math.ceil(data.length / rowsPerPage);
+
+        if (pageCount <= 1) return;
+
+        // Previous button
+        const prevLi = document.createElement("li");
+        prevLi.className = `page-item prev ${
+          currentPage === 1 ? "disabled" : ""
+        }`;
+        prevLi.innerHTML = `<a class="page-link" href="#" aria-label="Previous"><span><</span></a>`;
+        prevLi.addEventListener("click", (e) => {
+          e.preventDefault();
+          if (currentPage > 1) {
+            currentPage--;
+            renderFunction(data, currentPage);
+            setupPagination(
+              tableId,
+              paginationId,
+              data,
+              currentPage,
+              rowsPerPage,
+              renderFunction
+            );
+          }
+        });
+        pagination.appendChild(prevLi);
+
+        // First page
+        if (currentPage > 2) {
+          const firstLi = document.createElement("li");
+          firstLi.className = "page-item";
+          firstLi.innerHTML = `<a class="page-link" href="#">1</a>`;
+          firstLi.addEventListener("click", (e) => {
+            e.preventDefault();
+            currentPage = 1;
+            renderFunction(data, currentPage);
+            setupPagination(
+              tableId,
+              paginationId,
+              data,
+              currentPage,
+              rowsPerPage,
+              renderFunction
+            );
+          });
+          pagination.appendChild(firstLi);
+
+          if (currentPage > 3) {
+            const ellipsis = document.createElement("li");
+            ellipsis.className = "page-item disabled";
+            ellipsis.innerHTML = `<span class="page-link">...</span>`;
+            pagination.appendChild(ellipsis);
+          }
+        }
+
+        // Page numbers around current page
+        for (
+          let i = Math.max(1, currentPage - 1);
+          i <= Math.min(pageCount, currentPage + 1);
+          i++
+        ) {
+          const li = document.createElement("li");
+          li.className = `page-item ${i === currentPage ? "active" : ""}`;
+          li.innerHTML = `<a class="page-link" href="#">${i}</a>`;
+          li.addEventListener("click", (e) => {
+            e.preventDefault();
+            currentPage = i;
+            renderFunction(data, currentPage);
+            setupPagination(
+              tableId,
+              paginationId,
+              data,
+              currentPage,
+              rowsPerPage,
+              renderFunction
+            );
+          });
+          pagination.appendChild(li);
+        }
+
+        // Last page
+        if (currentPage < pageCount - 1) {
+          if (currentPage < pageCount - 2) {
+            const ellipsis = document.createElement("li");
+            ellipsis.className = "page-item disabled";
+            ellipsis.innerHTML = `<span class="page-link">...</span>`;
+            pagination.appendChild(ellipsis);
+          }
+
+          const lastLi = document.createElement("li");
+          lastLi.className = "page-item";
+          lastLi.innerHTML = `<a class="page-link" href="#">${pageCount}</a>`;
+          lastLi.addEventListener("click", (e) => {
+            e.preventDefault();
+            currentPage = pageCount;
+            renderFunction(data, currentPage);
+            setupPagination(
+              tableId,
+              paginationId,
+              data,
+              currentPage,
+              rowsPerPage,
+              renderFunction
+            );
+          });
+          pagination.appendChild(lastLi);
+        }
+
+        // Next button
+        const nextLi = document.createElement("li");
+        nextLi.className = `page-item next ${
+          currentPage === pageCount ? "disabled" : ""
+        }`;
+        nextLi.innerHTML = `<a class="page-link" href="#" aria-label="Next"><span>></span></a>`;
+        nextLi.addEventListener("click", (e) => {
+          e.preventDefault();
+          if (currentPage < pageCount) {
+            currentPage++;
+            renderFunction(data, currentPage);
+            setupPagination(
+              tableId,
+              paginationId,
+              data,
+              currentPage,
+              rowsPerPage,
+              renderFunction
+            );
+          }
+        });
+        pagination.appendChild(nextLi);
+      }
+
       // Fetch and display customers
       async function fetchCustomers() {
         try {
@@ -1042,7 +1361,18 @@
           }
 
           const customers = await response.json();
-          displayCustomers(customers);
+          // Store all customers and reverse to show newest first
+          allCustomers = [...customers].reverse();
+          displayCustomers(allCustomers, currentCustomerPage);
+          setupPagination(
+            "customerTable",
+            "customerPagination",
+            allCustomers,
+            currentCustomerPage,
+            rowsPerPage,
+            displayCustomers
+          );
+
           // Update stats
           const suppliersResponse = await fetch(
             "https://backend-api-3qcm.onrender.com/api/manufacturer/suppliers",
@@ -1052,7 +1382,8 @@
           );
           if (suppliersResponse.ok) {
             const suppliers = await suppliersResponse.json();
-            updateStats(customers, suppliers);
+            allSuppliers = [...suppliers].reverse();
+            updateStats(allCustomers, allSuppliers);
           }
         } catch (error) {
           console.error("Error fetching customer data:", error);
@@ -1060,24 +1391,35 @@
         }
       }
 
-      function displayCustomers(customers) {
+      function displayCustomers(customers, page) {
         const tableBody = document.getElementById("customerTableBody");
         tableBody.innerHTML = "";
 
-        customers.forEach((customer) => {
+        const start = (page - 1) * rowsPerPage;
+        const end = start + rowsPerPage;
+        const paginatedData = customers.slice(start, end);
+
+        if (paginatedData.length === 0) {
+          tableBody.innerHTML = `<tr><td colspan="6" class="text-center">No customers found</td></tr>`;
+          return;
+        }
+
+        paginatedData.forEach((customer) => {
           const row = document.createElement("tr");
 
           row.innerHTML = `
                     <td>${customer.customer_id || "N/A"}</td>
                     <td>${customer.name || "N/A"}</td>
                     <td>${customer.email || "N/A"}</td>
-                    <td>${customer.location || "N/A"}</td>
-                    <td>${customer.phone_number || "N/A"}</td>
+                    <td class="mobile-hidden">${customer.location || "N/A"}</td>
+                    <td class="mobile-hidden">${
+                      customer.phone_number || "N/A"
+                    }</td>
                     <td>
-                        <button class="action-btn edit-btn" onclick="editCustomer('${
+                        <button class="btn btn-sm btn-primary me-1" onclick="editCustomer('${
                           customer._id
                         }')">Edit</button>
-                        <button class="action-btn delete-btn" onclick="deleteCustomer('${
+                        <button class="btn btn-sm btn-danger" onclick="deleteCustomer('${
                           customer._id
                         }')">Delete</button>
                     </td>
@@ -1101,33 +1443,56 @@
           }
 
           const suppliers = await response.json();
-          displaySuppliers(suppliers);
+          // Store all suppliers and reverse to show newest first
+          allSuppliers = [...suppliers].reverse();
+          displaySuppliers(allSuppliers, currentSupplierPage);
+          setupPagination(
+            "supplierTable",
+            "supplierPagination",
+            allSuppliers,
+            currentSupplierPage,
+            rowsPerPage,
+            displaySuppliers
+          );
         } catch (error) {
           console.error("Error fetching supplier data:", error);
           alert("Error fetching supplier data. Check console for details.");
         }
       }
 
-      function displaySuppliers(suppliers) {
+      function displaySuppliers(suppliers, page) {
         const tableBody = document.getElementById("supplierTableBody");
         tableBody.innerHTML = "";
 
-        suppliers.forEach((supplier) => {
+        const start = (page - 1) * rowsPerPage;
+        const end = start + rowsPerPage;
+        const paginatedData = suppliers.slice(start, end);
+
+        if (paginatedData.length === 0) {
+          tableBody.innerHTML = `<tr><td colspan="8" class="text-center">No suppliers found</td></tr>`;
+          return;
+        }
+
+        paginatedData.forEach((supplier) => {
           const row = document.createElement("tr");
 
           row.innerHTML = `
                     <td>${supplier.supplierId || "N/A"}</td>
                     <td>${supplier.name || "N/A"}</td>
                     <td>${supplier.email || "N/A"}</td>
-                    <td>${supplier.category || "N/A"}</td>
-                    <td>${supplier.companyName || "N/A"}</td>
-                    <td>${supplier.location || "N/A"}</td>
-                    <td>${supplier.phoneNumber || "N/A"}</td>
+                    <td class="mobile-hidden">${supplier.category || "N/A"}</td>
+                    <td class="mobile-hidden">${
+                      supplier.companyName || "N/A"
+                    }</td>
+                    <td class="mobile-hidden">${supplier.location || "N/A"}</td>
+                    <td class="mobile-hidden">${
+                      supplier.phoneNumber || "N/A"
+                    }</td>
                     <td>
-                        <button class="action-btn edit-btn" onclick="editSupplier('${
+                        <button class="btn btn-sm btn-primary me-1" onclick="editSupplier('${
                           supplier._id
                         }')">Edit</button>
-                        <button class="action-btn delete-btn" onclick="deleteSupplier('${
+                        <button class="btn btn-sm btn-danger" onclick="deleteSupplier('${
                           supplier._id
                         }')">Delete</button>
                     </td>
@@ -1440,8 +1805,7 @@
           }
         }
       }
-    </script>
-    <script>
+
       // Enhanced search function with debouncing
       let searchTimeout;
 
@@ -1483,39 +1847,6 @@
           }
         }, 300);
       }
-    </script>
-    <script>
-      // Previous script content remains the same until the end
-
-      // Add this new search function at the end of the script
-      function searchTable(inputId, tableBodyId) {
-        const input = document.getElementById(inputId);
-        const filter = input.value.toUpperCase();
-        const tableBody = document.getElementById(tableBodyId);
-        const rows = tableBody.getElementsByTagName("tr");
-
-        for (let i = 0; i < rows.length; i++) {
-          const row = rows[i];
-          const cells = row.getElementsByTagName("td");
-          let found = false;
-
-          // Skip the first cell (ID) and last cell (actions)
-          for (let j = 1; j < cells.length - 1; j++) {
-            const cell = cells[j];
-            if (cell) {
-              const textValue = cell.textContent || cell.innerText;
-              if (textValue.toUpperCase().indexOf(filter) > -1) {
-                found = true;
-                break;
-              }
-            }
-          }
-
-          row.style.display = found ? "" : "none";
-        }
-      }
-
-      // Make sure to keep all your existing functions below this
     </script>
   </body>
 </html>
