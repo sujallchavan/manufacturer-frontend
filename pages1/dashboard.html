@@ -1245,114 +1245,313 @@ async function fetchApprovedProjects() {
       }
 
       function openModalFinlApporved(order, isFinalApproved = false) {
-        const existingModal = document.getElementById("orderModal");
-        if (existingModal) existingModal.remove();
+    const existingModal = document.getElementById("orderModal");
+    if (existingModal) existingModal.remove();
 
-        const modalHtml = `
-              <div class="modal fade" id="orderModal" tabindex="-1" aria-labelledby="orderModalLabel" aria-hidden="true">
-                  <div class="modal-dialog modal-lg">
-                      <div class="modal-content">
-                          <div class="modal-header">
-                              <h5 class="modal-title">Order Details - ${
-                                order.order_id
-                              }</h5>
-                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                          </div>
-                          <div class="modal-body">
-                              <div class="row">
-                                  <div class="col-md-6">
-                                      <div class="mb-3">
-                                          <label class="form-label">Customer ID</label>
-                                          <input type="text" class="form-control" value="${
-                                            order.customer_id
-                                          }" readonly>
-                                      </div>
-                                      <div class="mb-3">
-                                          <label class="form-label">Company Name</label>
-                                          <input type="text" class="form-control" value="${
-                                            order.cname
-                                          }" readonly>
-                                      </div>
-                                      <div class="mb-3">
-                                          <label class="form-label">Project Name</label>
-                                          <input type="text" class="form-control" value="${
-                                            order.pname
-                                          }" readonly>
-                                      </div>
-                                      <div class="mb-3">
-                                          <label class="form-label">Part Name</label>
-                                          <input type="text" class="form-control" value="${
-                                            order.Part_Name
-                                          }" readonly>
-                                      </div>
-                                  </div>
-                                  <div class="col-md-6">
-                                      <div class="mb-3">
-                                          <label class="form-label">Category</label>
-                                          <input type="text" class="form-control" value="${
-                                            order.category
-                                          }" readonly>
-                                      </div>
-                                      <div class="mb-3">
-                                          <label class="form-label">Target Value</label>
-                                          <input type="text" class="form-control" value="${
-                                            order.tv
-                                          }" readonly>
-                                      </div>
-                                      <div class="mb-3">
-                                          <label class="form-label">Annual Volume</label>
-                                          <input type="text" class="form-control" value="${
-                                            order.av
-                                          }" readonly>
-                                      </div>
-                                      <div class="mb-3">
-                                          <label class="form-label">Working Status</label>
-                                          <input type="text" class="form-control" id="workingStatusField" value="${
-                                            order.working_status || 'Not Specified'
-                                          }" readonly>
-                                      </div>
-                                  </div>
-                              </div>
-                              
-                              ${
-                                order.pdf_file && order.pdf_file.trim() !== ""
-                                  ? `
-                              <div class="mt-3 text-center">
-                                  <a href="${order.pdf_file}" download class="btn btn-success">
-                                      <i class="fas fa-file-download me-2"></i>Download File
-                                  </a>
-                              </div>`
-                                  : `
-                              <div class="alert alert-warning mt-3 text-center">No file available</div>`
-                              }
-                          </div>
-                          <div class="modal-footer">
-                              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                              ${
-                                isFinalApproved
-                                  ? order.working_status === "Completed"
-                                    ? `<span class="confirmed-badge"><i class="fas fa-check-circle"></i>Already Confirmed</span>`
-                                    : `
-                                    <button type="button" class="btn btn-danger me-2" onclick="rejectCompletion(${order.order_id})">Reject Completion</button>
-                                    <button type="button" class="btn btn-success" onclick="confirmCompletion(${order.order_id})">Confirm Completion</button>`
-                                  : ''
-                              }
-                          </div>
-                      </div>
-                  </div>
-              </div>`;
+    // Format dates if they exist
+    const formatDate = (dateString) => {
+        if (!dateString) return 'Not specified';
+        const date = new Date(dateString);
+        return date.toLocaleDateString('en-US', { 
+            year: 'numeric', 
+            month: 'short', 
+            day: 'numeric' 
+        });
+    };
 
-        document.body.insertAdjacentHTML("beforeend", modalHtml);
-        const modal = new bootstrap.Modal(document.getElementById("orderModal"));
-        modal.show();
+    const modalHtml = `
+    <div class="modal fade" id="orderModal" tabindex="-1" aria-labelledby="orderModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title">Order #${order.order_id} Details</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="order-details-container">
+                        <!-- Order Information -->
+                        <div class="detail-card">
+                            <div class="detail-card-header">
+                                <i class="fas fa-info-circle me-2"></i>
+                                <h6>Order Information</h6>
+                            </div>
+                            <div class="detail-card-body">
+                                <div class="detail-row">
+                                    <span class="detail-label">Status:</span>
+                                    <span class="badge ${order.working_status === "Completed" ? "bg-success" : 
+                                      order.working_status === "Working" ? "bg-primary" : "bg-warning"}">
+                                        ${order.working_status || "N/A"}
+                                    </span>
+                                </div>
+                                <div class="detail-row">
+                                    <span class="detail-label">Approval:</span>
+                                    <span class="badge ${order.isApproved === "Approved" ? "bg-success" : "bg-danger"}">
+                                        ${order.isApproved || "N/A"}
+                                    </span>
+                                </div>
+                                <div class="detail-row">
+                                    <span class="detail-label">Final Approval:</span>
+                                    <span class="badge ${order.isFinalApproved === "Approved" ? "bg-success" : "bg-secondary"}">
+                                        ${order.isFinalApproved || "Disapproved"}
+                                    </span>
+                                </div>
+                                <div class="detail-row">
+                                    <span class="detail-label">Created:</span>
+                                    <span>${formatDate(order.createdAt)}</span>
+                                </div>
+                            </div>
+                        </div>
 
-        // Remove modal from DOM when closed
-        document
-          .getElementById("orderModal")
-          .addEventListener("hidden.bs.modal", function () {
-            this.remove();
-          });
-      }
+                        <!-- Part Details -->
+                        <div class="detail-card">
+                            <div class="detail-card-header">
+                                <i class="fas fa-cube me-2"></i>
+                                <h6>Part Details</h6>
+                            </div>
+                            <div class="detail-card-body">
+                                <div class="detail-row">
+                                    <span class="detail-label">Part Name:</span>
+                                    <span>${order.Part_Name || "N/A"}</span>
+                                </div>
+                                <div class="detail-row">
+                                    <span class="detail-label">Blank Name:</span>
+                                    <span>${order.blank_name || "N/A"}</span>
+                                </div>
+                                <div class="detail-row">
+                                    <span class="detail-label">Category:</span>
+                                    <span class="badge bg-info">${order.category || "N/A"}</span>
+                                </div>
+                                <div class="detail-row">
+                                    <span class="detail-label">Description:</span>
+                                    <span>${order.desc || "N/A"}</span>
+                                </div>
+                                <div class="detail-row">
+                                    <span class="detail-label">Target Value:</span>
+                                    <span>$${order.tv?.toLocaleString() || "N/A"}</span>
+                                </div>
+                                <div class="detail-row">
+                                    <span class="detail-label">Part Reference:</span>
+                                    <span>${order.pr || "N/A"}</span>
+                                </div>
+                                <div class="detail-row">
+                                    <span class="detail-label">Annual Volume:</span>
+                                    <span>${order.av?.toLocaleString() || "N/A"} units</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Customer Information -->
+                        <div class="detail-card">
+                            <div class="detail-card-header">
+                                <i class="fas fa-user-tie me-2"></i>
+                                <h6>Customer Information</h6>
+                            </div>
+                            <div class="detail-card-body">
+                                <div class="detail-row">
+                                    <span class="detail-label">Company:</span>
+                                    <span>${order.cname || "N/A"}</span>
+                                </div>
+                                <div class="detail-row">
+                                    <span class="detail-label">Customer ID:</span>
+                                    <span>${order.customer_id || "N/A"}</span>
+                                </div>
+                                <div class="detail-row">
+                                    <span class="detail-label">Email:</span>
+                                    <span>${order.email || "N/A"}</span>
+                                </div>
+                                <div class="detail-row">
+                                    <span class="detail-label">Phone:</span>
+                                    <span>${order.phone_number || "N/A"}</span>
+                                </div>
+                                <div class="detail-row">
+                                    <span class="detail-label">Contact No.:</span>
+                                    <span>${order.cpno || "N/A"}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Timeline -->
+                        <div class="detail-card">
+                            <div class="detail-card-header">
+                                <i class="fas fa-calendar-alt me-2"></i>
+                                <h6>Timeline</h6>
+                            </div>
+                            <div class="detail-card-body">
+                                <div class="detail-row">
+                                    <span class="detail-label">Quote Submission:</span>
+                                    <span>${formatDate(order.qs)}</span>
+                                </div>
+                                <div class="detail-row">
+                                    <span class="detail-label">Production Start:</span>
+                                    <span>${formatDate(order.sop)}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Documents -->
+                        ${order.pdf_file ? `
+                        <div class="detail-card">
+                            <div class="detail-card-header">
+                                <i class="fas fa-file-pdf me-2"></i>
+                                <h6>Documents</h6>
+                            </div>
+                            <div class="detail-card-body text-center">
+                                <a href="${order.pdf_file}" download class="btn btn-sm btn-success">
+                                    <i class="fas fa-download me-1"></i> Download PDF
+                                </a>
+                            </div>
+                        </div>
+                        ` : ''}
+
+                        <!-- Supplier Responses -->
+                        <div class="detail-card">
+                            <div class="detail-card-header">
+                                <i class="fas fa-truck me-2"></i>
+                                <h6>Supplier Responses</h6>
+                            </div>
+                            <div class="detail-card-body">
+                                ${order.supplierResponses && order.supplierResponses.length > 0 ? `
+                                <div class="table-responsive">
+                                    <table class="table table-sm table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>Supplier ID</th>
+                                                <th>Status</th>
+                                                <th>Date</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            ${order.supplierResponses.map(response => `
+                                            <tr>
+                                                <td>${response.supplier_Id || "N/A"}</td>
+                                                <td>
+                                                    <span class="badge ${response.status === "Accepted" ? "bg-success" : 
+                                                      response.status === "Rejected" ? "bg-danger" : "bg-warning"}">
+                                                        ${response.status || "N/A"}
+                                                    </span>
+                                                </td>
+                                                <td>${formatDate(response.date)}</td>
+                                            </tr>
+                                            `).join('')}
+                                        </tbody>
+                                    </table>
+                                </div>
+                                ` : '<p class="text-muted mb-0">No supplier responses yet</p>'}
+                            </div>
+                        </div>
+
+                        <!-- Accepted Supplier -->
+                        ${order.acceptedSupplier ? `
+                        <div class="detail-card">
+                            <div class="detail-card-header">
+                                <i class="fas fa-check-circle me-2"></i>
+                                <h6>Assigned Supplier</h6>
+                            </div>
+                            <div class="detail-card-body">
+                                <div class="detail-row">
+                                    <span class="detail-label">Supplier ID:</span>
+                                    <span>${order.acceptedSupplier.supplier_Id || "N/A"}</span>
+                                </div>
+                                <div class="detail-row">
+                                    <span class="detail-label">Assigned At:</span>
+                                    <span>${formatDate(order.acceptedSupplier.acceptedAt)}</span>
+                                </div>
+                            </div>
+                        </div>
+                        ` : ''}
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    ${isFinalApproved ? 
+                        order.working_status === "Completed" ? 
+                            `<div class="already-confirmed-status">
+                                <i class="fas fa-check-circle"></i> Already Confirmed
+                            </div>` : 
+                            `
+                            <button type="button" class="btn btn-danger me-2" onclick="rejectCompletion(${order.order_id})">
+                                Reject Completion
+                            </button>
+                            <button type="button" class="btn btn-success" onclick="confirmCompletion(${order.order_id})">
+                                Confirm Completion
+                            </button>`
+                        : ''
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .order-details-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 15px;
+        }
+        .detail-card {
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .detail-card-header {
+            background-color: #f8f9fa;
+            padding: 10px 15px;
+            border-bottom: 1px solid #dee2e6;
+            display: flex;
+            align-items: center;
+        }
+        .detail-card-header h6 {
+            margin: 0;
+            font-weight: 600;
+            color: #495057;
+        }
+        .detail-card-body {
+            padding: 15px;
+        }
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+        .detail-row:last-child {
+            margin-bottom: 0;
+        }
+        .detail-label {
+            font-weight: 500;
+            color: #6c757d;
+        }
+        .table-sm th, .table-sm td {
+            padding: 0.3rem 0.5rem;
+        }
+        .already-confirmed-status {
+            border: 2px solid #28a745;
+            color: #28a745;
+            padding: 8px 16px;
+            border-radius: 4px;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            background-color: rgba(40, 167, 69, 0.1);
+            cursor: default;
+            user-select: none;
+        }
+        .already-confirmed-status i {
+            font-size: 1.1em;
+            margin-right: 8px;
+            color: #28a745;
+        }
+    </style>
+    `;
+
+    document.body.insertAdjacentHTML("beforeend", modalHtml);
+    const modal = new bootstrap.Modal(document.getElementById("orderModal"));
+    modal.show();
+
+    // Remove modal from DOM when closed
+    document.getElementById("orderModal").addEventListener("hidden.bs.modal", function() {
+        this.remove();
+    });
+}
 
       async function rejectCompletion(orderId) {
         if (!confirm("Are you sure you want to reject this completion? This will set the project back to 'Disapproved' status.")) {
