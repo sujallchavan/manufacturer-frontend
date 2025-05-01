@@ -630,7 +630,7 @@
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="users.html">
+            <a class="nav-link" href="new.html">
               <i class="material-symbols-rounded me-2">group</i>
               User Management
             </a>
@@ -1103,7 +1103,7 @@
         document.getElementById("totalOrdersCount").textContent = orders.length;
         
         const pendingCount = orders.filter(order => 
-          !order.isApproved || order.isApproved === "Pending"
+          !order.isApproved || order.isApproved === "Disapproved"
         ).length;
         document.getElementById("pendingOrdersCount").textContent = pendingCount;
         
