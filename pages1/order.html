@@ -1055,7 +1055,7 @@
       async function loadUserProfile(email) {
         try {
           const response = await fetch(
-            `http://localhost:5000/api/manufacturer/user/${email}`
+            `https://backend-api-3qcm.onrender.com/api/manufacturer/user/${email}`
           );
           if (!response.ok) throw new Error("Failed to fetch user data");
           
@@ -1075,7 +1075,7 @@
       async function fetchAllOrders() {
         try {
           const response = await fetch(
-            "http://localhost:5000/api/manufacturer/customer-requirements"
+            "https://backend-api-3qcm.onrender.com/api/manufacturer/customer-requirements"
           );
           if (!response.ok) throw new Error("Failed to fetch orders");
           
@@ -1539,7 +1539,7 @@ document.querySelectorAll('.contact-supplier-btn').forEach(btn => {
     showLoading('Loading supplier details...');
     
     const response = await fetch(
-      `http://localhost:5000/api/manufacturer/supplier/simple/${supplierId}`
+      `https://backend-api-3qcm.onrender.com/api/manufacturer/supplier/simple/${supplierId}`
     );
     
     if (!response.ok) throw new Error("Failed to fetch supplier details");
@@ -1651,7 +1651,7 @@ async function contactSupplier(supplierId) {
     showLoading('Loading supplier contact information...');
     
     const response = await fetch(
-      `http://localhost:5000/api/manufacturer/supplier/simple/${supplierId}`
+      `https://backend-api-3qcm.onrender.com/api/manufacturer/supplier/simple/${supplierId}`
     );
     
     if (!response.ok) {
@@ -1780,7 +1780,7 @@ async function saveOrderChanges() {
     }
     
     const response = await fetch(
-      `http://localhost:5000/api/manufacturer/update-order/${currentOrderId}`,
+      `https://backend-api-3qcm.onrender.com/api/manufacturer/update-order/${currentOrderId}`,
       {
         method: "PUT",
         headers: {
@@ -1813,7 +1813,7 @@ async function contactSupplier(supplierId) {
     showLoading('Loading supplier contact information...');
     
     const response = await fetch(
-      `http://localhost:5000/api/manufacturer/suppliers/${supplierId}`
+      `https://backend-api-3qcm.onrender.com/api/manufacturer/suppliers/${supplierId}`
     );
     
     if (!response.ok) {
@@ -1936,7 +1936,7 @@ document.querySelectorAll('.contact-supplier-btn').forEach(btn => {
           }
           
           const response = await fetch(
-            `http://localhost:5000/api/manufacturer/update-order/${currentOrderId}`,
+            `https://backend-api-3qcm.onrender.com/api/manufacturer/update-order/${currentOrderId}`,
             {
               method: "PUT",
               headers: {
@@ -1969,7 +1969,7 @@ document.querySelectorAll('.contact-supplier-btn').forEach(btn => {
         document.getElementById("logoutBtn").addEventListener("click", async function() {
           try {
             const response = await fetch(
-              "http://localhost:5000/api/manufacturer/logout",
+              "https://backend-api-3qcm.onrender.com/api/manufacturer/logout",
               {
                 method: "POST",
                 credentials: "include",
