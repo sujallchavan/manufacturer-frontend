@@ -88,6 +88,32 @@
         );
       }
 
+      /* Logo Styles */
+      .logo-container {
+        position: absolute;
+        top: 30px;
+        left: 30px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        z-index: 10;
+      }
+
+      .logo-img {
+        height: 50px; /* Fixed height */
+        width: auto; /* Maintain aspect ratio */
+        object-fit: contain;
+      }
+
+      .logo-text {
+        font-weight: 700;
+        font-size: 1.2rem;
+        background: var(--text-gradient);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        display: none; /* Hide text since your logo includes text */
+      }
+
       h1 {
         font-size: 3.5rem;
         font-weight: 800;
@@ -204,6 +230,7 @@
         gap: 2rem;
         margin-top: 3rem;
         flex-wrap: wrap;
+        margin-bottom: 20px;
       }
 
       .feature {
@@ -403,7 +430,8 @@
       /* Mobile-specific styles */
       @media (max-width: 768px) {
         h1 {
-          font-size: 2.5rem;
+          padding-top: 70px;
+          font-size: 2.1rem;
         }
 
         .subtitle {
@@ -426,6 +454,15 @@
 
         .hero-content {
           padding: 0 5%;
+        }
+
+        .logo-container {
+          top: 20px;
+          left: 20px;
+        }
+
+        .logo-img {
+          height: 40px; /* Slightly smaller on mobile */
         }
       }
 
@@ -478,6 +515,12 @@
         <div class="shape shape-1"></div>
         <div class="shape shape-2"></div>
         <div class="shape shape-3"></div>
+      </div>
+
+      <!-- Logo Container with Image -->
+      <div class="logo-container animate__animated animate__fadeIn">
+        <!-- Replace "qt=q_95.webp" with your actual image path -->
+        <img src="ergoAsia.webp" alt="Company Logo" class="logo-img" />
       </div>
 
       <div class="hero-content">
