@@ -956,7 +956,7 @@
         try {
           // ✅ Fetch user details from backend using email
           const response = await fetch(
-            `https://backend-api-zz1t.onrender.com/api/manufacturer/user/${userEmail}`
+            `https://backend-api-hu8l.onrender.com/api/manufacturer/user/${userEmail}`
           );
 
           if (!response.ok) {
@@ -984,7 +984,7 @@
         .addEventListener("click", async function () {
           try {
             const response = await fetch(
-              "https://backend-api-zz1t.onrender.com/api/manufacturer/logout",
+              "https://backend-api-hu8l.onrender.com/api/manufacturer/logout",
               {
                 method: "POST",
                 credentials: "include",
@@ -1098,7 +1098,7 @@
 async function fetchApprovedProjects() {
   try {
     const response = await fetch(
-      "https://backend-api-zz1t.onrender.com/api/manufacturer/approved-requirements"
+      "https://backend-api-hu8l.onrender.com/api/manufacturer/approved-requirements"
     );
     const data = await response.json();
 
@@ -1172,7 +1172,7 @@ async function fetchApprovedProjects() {
       async function fetchFinalApprovedProjects() {
   try {
     const response = await fetch(
-      "https://backend-api-zz1t.onrender.com/api/manufacturer/approved-requirements"
+      "https://backend-api-hu8l.onrender.com/api/manufacturer/approved-requirements"
     );
     const data = await response.json();
 
@@ -1263,7 +1263,7 @@ async function fetchApprovedProjects() {
     const downloadUrl = order.pdf_file 
         ? order.pdf_file.startsWith('http') 
             ? order.pdf_file 
-            : `https://backend-api-zz1t.onrender.com${order.pdf_file}`
+            : `https://backend-api-hu8l.onrender.com${order.pdf_file}`
         : null;
 
     const modalHtml = `
@@ -1580,7 +1580,7 @@ async function fetchApprovedProjects() {
         }
 
         try {
-          const response = await fetch(`https://backend-api-zz1t.onrender.com/api/manufacturer/reject-order/${orderId}`, {
+          const response = await fetch(`https://backend-api-hu8l.onrender.com/api/manufacturer/reject-order/${orderId}`, {
             method: 'PUT',
             headers: {
               'Content-Type': 'application/json',
@@ -1610,7 +1610,7 @@ async function fetchApprovedProjects() {
 
         try {
           const response = await fetch(
-            `https://backend-api-zz1t.onrender.com/api/manufacturer/complete-order/${orderId}`,
+            `https://backend-api-hu8l.onrender.com/api/manufacturer/complete-order/${orderId}`,
             {
               method: "PUT",
               headers: {
@@ -1644,7 +1644,7 @@ async function fetchApprovedProjects() {
       async function fetchProjectsByWorkingStatus() {
         try {
           const response = await fetch(
-            "https://backend-api-zz1t.onrender.com/api/manufacturer/approved-requirements"
+            "https://backend-api-hu8l.onrender.com/api/manufacturer/approved-requirements"
           );
           const data = await response.json();
 
@@ -1710,7 +1710,7 @@ async function fetchApprovedProjects() {
       async function fetchProjects() {
         try {
           const response = await fetch(
-            "https://backend-api-zz1t.onrender.com/api/manufacturer/customer-requirements"
+            "https://backend-api-hu8l.onrender.com/api/manufacturer/customer-requirements"
           );
           if (!response.ok)
             throw new Error(`HTTP error! Status: ${response.status}`);
@@ -1765,7 +1765,7 @@ async function fetchApprovedProjects() {
         try {
           // Fetch all requirements to get total counts
           const requirementsResponse = await fetch(
-            "https://backend-api-zz1t.onrender.com/api/manufacturer/customer-requirements"
+            "https://backend-api-hu8l.onrender.com/api/manufacturer/customer-requirements"
           );
           const requirementsData = await requirementsResponse.json();
           
@@ -1803,14 +1803,14 @@ async function fetchApprovedProjects() {
           
           // Fetch customers count
           const customersResponse = await fetch(
-            "https://backend-api-zz1t.onrender.com/api/manufacturer/customers/count"
+            "https://backend-api-hu8l.onrender.com/api/manufacturer/customers/count"
           );
           const customersData = await customersResponse.json();
           document.getElementById("customersCount").innerText = customersData.count || 0;
           
           // Fetch suppliers count
           const suppliersResponse = await fetch(
-            "https://backend-api-zz1t.onrender.com/api/manufacturer/suppliers/count"
+            "https://backend-api-hu8l.onrender.com/api/manufacturer/suppliers/count"
           );
           const suppliersData = await suppliersResponse.json();
           document.getElementById("suppliersCount").innerText = suppliersData.count || 0;
@@ -1875,7 +1875,7 @@ async function fetchApprovedProjects() {
     const downloadUrl = order.pdf_file 
         ? order.pdf_file.startsWith('http') 
             ? order.pdf_file 
-            : `https://backend-api-zz1t.onrender.com${order.pdf_file}`
+            : `https://backend-api-hu8l.onrender.com${order.pdf_file}`
         : null;
 
     // Modal HTML
@@ -2016,7 +2016,7 @@ async function fetchApprovedProjects() {
           const downloadUrl = order.pdf_file 
             ? order.pdf_file.startsWith('http') 
               ? order.pdf_file 
-              : `https://backend-api-zz1t.onrender.com${order.pdf_file}`
+              : `https://backend-api-hu8l.onrender.com${order.pdf_file}`
             : null;
       
           // Modal HTML
@@ -2139,7 +2139,7 @@ async function fetchApprovedProjects() {
 
         try {
           const response = await fetch(
-            `https://backend-api-zz1t.onrender.com/api/manufacturer/update-approval/${orderId}`,
+            `https://backend-api-hu8l.onrender.com/api/manufacturer/update-approval/${orderId}`,
             {
               method: "PUT",
               headers: { "Content-Type": "application/json" },
@@ -2201,7 +2201,7 @@ async function fetchApprovedProjects() {
   try {
     // Fetch all requirements to get total counts
     const requirementsResponse = await fetch(
-      "https://backend-api-zz1t.onrender.com/api/manufacturer/customer-requirements"
+      "https://backend-api-hu8l.onrender.com/api/manufacturer/customer-requirements"
     );
     const requirementsData = await requirementsResponse.json();
     
@@ -2232,14 +2232,14 @@ async function fetchApprovedProjects() {
     
     // Fetch customers count (you'll need to implement this endpoint)
     const customersResponse = await fetch(
-      "https://backend-api-zz1t.onrender.com/api/manufacturer/customers/count"
+      "https://backend-api-hu8l.onrender.com/api/manufacturer/customers/count"
     );
     const customersData = await customersResponse.json();
     document.getElementById("customersCount").innerText = customersData.count || 0;
     
     // Fetch suppliers count (you'll need to implement this endpoint)
     const suppliersResponse = await fetch(
-      "https://backend-api-zz1t.onrender.com/api/manufacturer/suppliers/count"
+      "https://backend-api-hu8l.onrender.com/api/manufacturer/suppliers/count"
     );
     const suppliersData = await suppliersResponse.json();
     document.getElementById("suppliersCount").innerText = suppliersData.count || 0;
@@ -2297,7 +2297,7 @@ window.onload = function () {
 async function approveOrder(orderId) {
   try {
     const response = await fetch(
-      `https://backend-api-zz1t.onrender.com/api/manufacturer/final-approval/${orderId}`,
+      `https://backend-api-hu8l.onrender.com/api/manufacturer/final-approval/${orderId}`,
       {
         method: "PUT",
         headers: {
@@ -2323,7 +2323,7 @@ async function approveOrder(orderId) {
 async function disapproveOrder(orderId) {
   try {
     const response = await fetch(
-      `https://backend-api-zz1t.onrender.com/api/manufacturer/final-approval/${orderId}`,
+      `https://backend-api-hu8l.onrender.com/api/manufacturer/final-approval/${orderId}`,
       {
         method: "PUT",
         headers: {
